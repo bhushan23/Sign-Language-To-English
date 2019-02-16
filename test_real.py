@@ -10,6 +10,7 @@ import numpy as np
 import torch.nn.functional as F
 from tools import *
 from models import *
+from interface import *
 ## Methods
 
 transform = transforms.Compose([
@@ -18,13 +19,13 @@ transform = transforms.Compose([
             transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
     ])
 
-hand_test_data = torchvision.datasets.ImageFolder('../dataset/data/new_test/', transform = transform)
+hand_test_data = torchvision.datasets.ImageFolder('../dataset/data/new_test/', transform = None)
 test_dataloader = torch.utils.data.DataLoader(hand_test_data,
                                           batch_size=1,
                                           shuffle=False)
 
 model = M2()
-model.load_state_dict(torch.load('./checkpoints/model.pkl'))
+model.load_state_dict(torch.load('./checkpoints/model95.pkl'))
 # model = model.cuda()
 
 prediction = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't' , 'u', 'v', 'x', 'y']
@@ -32,12 +33,17 @@ prediction = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', '
 # train(model, train_dataloader, test_dataloader, 100)
 
 
-for _, sample in enumerate(test_dataloader):
-    data = sample[0] #.cuda()
-    label = torch.tensor(sample[1]) #.cuda()
+# for _, sample in enumerate(test_dataloader):
+#     data = sample[0] #.cuda()
+#     label = torch.tensor(sample[1]) #.cuda()
     
-    pred = model.forward(data)
-    pred = pred.max(1)[1]
-    print(pred)
-    print('Prediction: ', prediction[pred[0]])
+#     pred = model.forward(data)
+#     pred = pred.max(1)[1]
+#     print(pred)
+#     print('Prediction: ', prediction[pred[0]])
 
+detector = SignLangDetector()
+# for _, sample in enumerate(test_dataloader):
+# data = Image.open() #sample[0] #.cuda()
+out = detector.predict('../dataset/data/new_test/e/e_1.jpg')
+print('Prediction: ', out)
