@@ -24,7 +24,7 @@ test_dataloader = torch.utils.data.DataLoader(hand_test_data,
                                           shuffle=False)
 
 model = M2()
-model.load_state_dict(torch.load('./checkpoints/model45.pkl'))
+model.load_state_dict(torch.load('./checkpoints/model.pkl'))
 # model = model.cuda()
 
 prediction = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't' , 'u', 'v', 'x', 'y']
@@ -38,5 +38,6 @@ for _, sample in enumerate(test_dataloader):
     
     pred = model.forward(data)
     pred = pred.max(1)[1]
-    print('Prediction: ', prediction[pred[0][0]])
+    print(pred)
+    print('Prediction: ', prediction[pred[0]])
 
