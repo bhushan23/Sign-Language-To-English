@@ -20,7 +20,7 @@ import torch
 #     return out.clamp(0, 1)
 # 
 
-def test(model, data_loader, print_acc = True):
+def test(model, name, data_loader, print_acc = True):
 
   correct_cnt = 0
   elements    = 0.0
@@ -43,5 +43,5 @@ def test(model, data_loader, print_acc = True):
   acc = (float(correct_cnt.item()) / (float(elements))) * 100.0
   
   if print_acc:
-    print('test: ', acc)
+    print(name, ': ', acc)
   return acc
