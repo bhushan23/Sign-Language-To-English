@@ -60,6 +60,7 @@ def train(model, train_dataloader, test_dataloader, num_epochs = 10):
 
 
 transform = transforms.Compose([
+            transforms.Grayscale(num_output_channels=1),
             transforms.Resize((64,64)),
             transforms.ToTensor(),
             transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
@@ -75,7 +76,7 @@ test_dataloader = torch.utils.data.DataLoader(hand_test_data,
                                           batch_size=64,
                                           shuffle=True)
 
-model = M2()
+model = M3()
 model = model.cuda()
 
 train(model, train_dataloader, test_dataloader, 100)

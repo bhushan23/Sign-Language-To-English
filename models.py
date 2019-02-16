@@ -39,3 +39,21 @@ class M2(nn.Module):
         x = F.relu(self.fc1(x))
         x = F.softmax(self.fc2(x))
         return x
+
+class M3(nn.Module):
+    def __init__(self):
+        super(M3, self).__init__()
+        self.conv1 = nn.Conv2d(1, 64, 4)
+        self.maxpool1 = nn.MaxPool2d(64)
+        self.fc1 = nn.Linear(238144, 1024)
+        self.fc2 = nn.Linear(1024, 24)
+        
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = x.view(x.size(0), -1)
+        # print(x.shape)
+        x = F.relu(self.fc1(x))
+        x = F.softmax(self.fc2(x))
+        return x
+
+
