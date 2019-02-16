@@ -17,33 +17,25 @@ while True:
 
     img = frame #np.random.randint(0, 256, size=(200, 300, 3), dtype=np.uint8)
     height, width, channels = img.shape
-    upper_left = (int(width * .2), int(height / 4))
-    bottom_right = (int(width * .8), int(height * 3/4))
+    upper_left = (int(width / 4), int(height * .1))
+    bottom_right = (int(width * 3 / 4), int(height * 0.9))
+
+    mask = np.zeros(img.shape[:2],np.uint8)
+    bgdModel = np.zeros((1,65),np.float64)
+    fgdModel = np.zeros((1,65),np.float64)
+    rect = (int(width / 4), int(height * .1), int(width * 3 / 4), int(height * 0.9))
+    cv2.grabCut(img,mask,rect,bgdModel,fgdModel,5,cv2.GC_INIT_WITH_RECT)
+    mask2 = np.where((mask==2)|(mask==0),0,1).astype('uint8')
+    img = img*mask2[:,:,np.newaxis]
 
     # draw in the image
     cv2.rectangle(img, upper_left, bottom_right, (0, 255, 0), 2)
-    # fgMask = backSub.apply(img)
-    # cv2.imshow('test', img)
-    # img2 = np.moveaxis(img, -1, 0)   
-    # img2 = fgMask * img2
-    # img2 = np.moveaxis(img2, 0, -1) 
-    # cv2.imshow('mask', img2)
-    # cv2.waitKey(), 
-
+   
     # indexing array 
     rect_img = img[upper_left[1] : bottom_right[1], upper_left[0] : bottom_right[0]]
-    # rect_img = cv2.cvtColor(rect_img, cv2.COLOR_BGR2GRAY)
-    # fgMask = backSub.apply(rect_img)
-    
-
-    # img2 = np.moveaxis(rect_img, -1, 0)   
-    # img2 = fgMask * img2
-    # img2 = np.moveaxis(img2, 0, -1) 
-    # cv2.imshow('test', img2)
-    # cv2.waitKey(), 
 
     img_name = "temp_opencv/opencv_frame_{}.png".format(img_counter)
-    cv2.imwrite(img_name, rect_img)
+    cv2.imwrite(img_name, frame)
 
     out = detector.predict(img_name)
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -53,7 +45,7 @@ while True:
 
     if not ret:
         break
-    k = cv2.waitKey(2)
+    k = cv2.waitKey(5)
 
     if k%256 == 27:
         # ESC pressed
