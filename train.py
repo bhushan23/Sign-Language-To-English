@@ -3,16 +3,16 @@ import torchvision
 from torchvision import transforms
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-from matplotlib.pyplot import imshow
+# from matplotlib.pyplot import imshow
 from PIL import Image
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import torch.nn.functional as F
-
-
+from tools import *
+from models import *
 ## Methods
 
-def train(model, train_dataloader, num_epochs = 10):
+def train(model, train_dataloader, test_dataloader, num_epochs = 10):
   optimizer = torch.optim.Adam(model.parameters(), lr = 0.0001)
   criterion = nn.CrossEntropyLoss()
   
@@ -36,10 +36,11 @@ def train(model, train_dataloader, num_epochs = 10):
       optimizer.step()
       
     if i % 5 == 0:
-      torch.save(model.state_dict(), './checkpoints/model.pkl')
-      # test_acc.append(test(model, val_dataloader))
-      train_acc.append(test(model, train_dataloader))
-    loss_plt.append(total_loss.item())
+      train_acc.append(test(model, 'train',  train_dataloader))
+      test_acc.append(test(model, 'test', test_dataloader))
+      torch.save(model.cpu().state_dict(), './checkpoints/model.pkl')
+      model = model.cuda()
+      # loss_plt.append(total_loss.item())
     print(total_loss.item())  
     
   # plt.plot(train_acc)
@@ -64,13 +65,18 @@ transform = transforms.Compose([
             transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
     ])
 
-hand_data = torchvision.datasets.ImageFolder('./dataset/train/', transform = transform)
+hand_data = torchvision.datasets.ImageFolder('../dataset/data/train/', transform = transform)
 train_dataloader = torch.utils.data.DataLoader(hand_data,
                                           batch_size=64,
                                           shuffle=True)
 
-model = M1()
+hand_test_data = torchvision.datasets.ImageFolder('../dataset/data/test/', transform = transform)
+test_dataloader = torch.utils.data.DataLoader(hand_test_data,
+                                          batch_size=64,
+                                          shuffle=True)
+
+model = M2()
 model = model.cuda()
 
-train(model, train_dataloader)
+train(model, train_dataloader, test_dataloader, 100)
 
