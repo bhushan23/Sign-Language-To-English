@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from interface import *
 import pyttsx
+import time
 cam = cv2.VideoCapture(0)
 
 cv2.namedWindow("test")
@@ -52,13 +53,14 @@ while True:
     cv2.putText(img, out,(10,300), font, 4,(255,255,255), 2, cv2.LINE_AA)
     print('Prediction: ', out)
     if len(out_str) < 10:
-	out_str += out
+	out_str += ' '
+        out_str += out
     else:
 	engine.say(out_str)
 	engine.runAndWait()
 	out_str = ''
     cv2.imshow('img', img)
-
+    # time.sleep(0.5)
     if not ret:
         break
     k = cv2.waitKey(2)
