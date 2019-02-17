@@ -15,7 +15,8 @@ class SignLangDetector():
             transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
         ])
         self.model = M2()
-        self.model.load_state_dict(torch.load('./checkpoints/model95.pkl'))
+        # self.model.load_state_dict(torch.load('./checkpoints/model95.pkl'))
+	self.model.load_state_dict(torch.load('./checkpoints/model_gray55.pkl'))
         self.prediction = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't' , 'u', 'v', 'w', 'x', 'y']
 
 

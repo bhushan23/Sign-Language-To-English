@@ -76,7 +76,7 @@ test_dataloader = torch.utils.data.DataLoader(hand_test_data,
                                           batch_size=64,
                                           shuffle=True)
 
-model = M3()
+model = M2()
 model = model.cuda()
 
 train(model, train_dataloader, test_dataloader, 100)
